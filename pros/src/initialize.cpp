@@ -140,9 +140,7 @@ void initialize()
 {
 	robotDrive.makeDrive(-4,6,-5,7);
 	robotIntake.makeIntake(1,-20);
-	robotLift.makeLift(18,-19);
-	robotShooter.makeShooter(3,-2);
-	robotTurner.makeTurner(17);
+	robotShooter.makeShooter(3,-2,8);
 	// vision sensor 16
 }
 

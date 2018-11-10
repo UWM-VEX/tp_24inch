@@ -60,9 +60,7 @@
 #include "auto.hpp"
 #include "Drive.hpp"
 #include "Intake.hpp"
-#include "Lift.hpp"
 #include "Shooter.hpp"
-#include "Turner.hpp"
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure
