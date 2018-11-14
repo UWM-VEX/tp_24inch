@@ -20,11 +20,11 @@ void opcontrol() {
 	while (true) {
 		robotDrive.tankDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 		{
 			robotShooter.set(127);
 		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
 		{
 			robotShooter.set(-127);
 		}
@@ -33,12 +33,12 @@ void opcontrol() {
 			robotShooter.set(0);
 		}
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
 		{
 			robotIntake.setRoller(127);
 			robotIntake.setElevator(127);
 		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B))
+		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
 		{
 			robotIntake.setRoller(-127);
 			robotIntake.setElevator(-127);
