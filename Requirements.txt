@@ -1,0 +1,15 @@
+Drive
+	Tank Drive
+	Motion Profiling Capabilities
+Lift
+	Manual Drive
+	Preset Heights
+	Soft EOT Limits - Overrides
+Turner
+	Manual Drive
+	Auto Flip 180
+Claw
+	Manual Open/Close
+	Auto Open/Close
+		Close is torque based
+		Open is move to position relative
