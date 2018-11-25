@@ -39,7 +39,7 @@
 /**
  * You should add more #includes here
  */
-//#include "okapi/api.hpp"
+#include "okapi/api.hpp"
 //#include "pros/api_legacy.h"
 
 /**
@@ -59,8 +59,9 @@
 
 #include "auto.hpp"
 #include "Drive.hpp"
-#include "Intake.hpp"
-#include "Shooter.hpp"
+#include "Lift.hpp"
+#include "Claw.hpp"
+#include "Turner.hpp"
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure

@@ -16,37 +16,52 @@
 
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	pros::Controller partner(pros::E_CONTROLLER_PARTNER);
+	okapi::ChassisControllerIntegrated opcontrolDrive = robotDrive.makeDrive();
+	okapi::AsyncPosIntegratedController opcontrolLift = robotLift.makeLift();
+
+	bool lastTurnerRotate = false;
+	bool turnerAuto = false;
 
 	while (true) {
-		robotDrive.tankDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
+		opcontrolDrive.tank(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		opcontrolLift.controllerSet(partner.get_analog(ANALOG_LEFT_Y) / 127.0);
+
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
 		{
-			robotShooter.set(127);
+			robotClaw.set(127);
 		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 		{
-			robotShooter.set(-127);
+			robotClaw.set(-127);
 		}
 		else
 		{
-			robotShooter.set(0);
+			robotClaw.set(0);
 		}
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
+			turnerAuto = false;
+		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT))
+			turnerAuto = true;
+
+		if(turnerAuto)
 		{
-			robotIntake.setRoller(127);
-			robotIntake.setElevator(127);
-		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
-		{
-			robotIntake.setRoller(-127);
-			robotIntake.setElevator(-127);
+			robotTurner.rotate180(master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) && ! lastTurnerRotate);
+
+			lastTurnerRotate = master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT);
 		}
 		else
 		{
-			robotIntake.setRoller(0);
-			robotIntake.setElevator(0);
+			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
+			{
+				robotTurner.set(-30);
+			}
+			else
+			{
+				robotTurner.set(0);
+			}
 		}
 		
 		pros::delay(20);

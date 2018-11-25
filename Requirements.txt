@@ -1,15 +1,15 @@
 Drive
-	Tank Drive
-	Motion Profiling Capabilities
+	Tank Drive x
+	Motion Profiling Capabilities x
 Lift
-	Manual Drive
-	Preset Heights
-	Soft EOT Limits - Overrides
+	Manual Drive x
+	(Nice to have) Preset Heights - Priority 1
+	(Nice to have) Soft EOT Limits - Overrides - Priority 2
 Turner
-	Manual Drive
-	Auto Flip 180
+	Manual Drive x
+	Auto Flip 180 x
 Claw
-	Manual Open/Close
-	Auto Open/Close
+	Manual Open/Close x
+	(Nice to have) Auto Open/Close - Priority 3
 		Close is torque based
 		Open is move to position relative
