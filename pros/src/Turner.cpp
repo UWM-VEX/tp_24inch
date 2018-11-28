@@ -28,8 +28,8 @@ bool Turner::rotate180(bool isFirstTime)
 {
 	if(isFirstTime)
 	{
-		driver->move_relative(0.5, 100);
+		driver->move_relative(2.75, 127);
 	}
 
-	return std::abs(driver->get_position() - driver->get_target_position()) < 0.01;
+	return std::abs(driver->get_position() - driver->get_target_position()) < 0.05;
 }

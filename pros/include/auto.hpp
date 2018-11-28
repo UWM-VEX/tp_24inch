@@ -1,6 +1,10 @@
 #ifndef AUTO_H_
 #define AUTO_H_
 
+#define DO_NOTHING 0
+#define TEST 1
+#define MOTION_PROFILE 2
+
 struct AutonomousInfo {
 
 	int mode;

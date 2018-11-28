@@ -42,7 +42,7 @@ void lcdModeSelect()
 	int alliance = RED;
 	int autonomousSelection = 0;
 
-	const char * selectionText[] = {"DO_NOTHING", "TEST"}; // MODE DEFINITIONS
+	const char * selectionText[] = {"DO_NOTHING", "TEST", "Motion Profile"}; // MODE DEFINITIONS
 	int size = sizeof(selectionText) / sizeof(int);
 
 	autonomousSelection = 0;
@@ -138,10 +138,10 @@ void lcdModeSelect()
  */
 void initialize() 
 {
-	robotDrive.initDrive(2,-3,-5,7);
-	robotLift.initLift(8,9);
-	robotTurner.initTurner(10);
-	robotClaw.initClaw(12, 13);
+	robotDrive.initDrive(15,-16,12,-11);
+	robotLift.initLift(-14,13);
+	robotTurner.initTurner(-17);
+	robotClaw.initClaw(18, 1);
 
 	lcdModeSelect();
 }

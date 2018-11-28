@@ -1,5 +1,7 @@
 #include "main.h"
 
+using namespace okapi;
+
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -13,21 +15,40 @@
  */
 void autonomous()
 {
-	okapi::ChassisControllerIntegrated autoDrive = robotDrive.makeDrive();
+	ChassisControllerIntegrated autoDrive = robotDrive.makeDrive();
 
-	auto profileController = okapi::AsyncControllerFactory::motionProfile(
+	auto profileController = AsyncControllerFactory::motionProfile(
 		0.5,  // Maximum linear velocity of the Chassis in m/s
-		2.0,  // Maximum linear acceleration of the Chassis in m/s/s
+		1.0,  // Maximum linear acceleration of the Chassis in m/s/s
 		10.0, // Maximum linear jerk of the Chassis in m/s/s/s
 		autoDrive // Chassis Controller
 	);
 
-	okapi::AsyncPosIntegratedController autoLift = robotLift.makeLift();
+	autoDrive.setMaxVelocity(300);
+
+	AsyncPosIntegratedController autoLift = robotLift.makeLift();
 
 	switch(autonomousInfoStruct.mode)
 	{
-		case(0):
+		case(DO_NOTHING):
 
+		break;
+		case(TEST):
+			autoDrive.moveDistance(5_ft);
+			autoDrive.turnAngle(90_deg);
+			autoDrive.turnAngle(-90_deg);
+			autoDrive.moveDistance(-5_ft);
+		break;
+		case(MOTION_PROFILE):
+			profileController.generatePath({
+			  okapi::Point{0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+			  okapi::Point{3_ft, 3_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "A" // Profile name
+			);
+
+			profileController.setTarget("A");
+
+			profileController.waitUntilSettled();
 		break;
 		default:
 		// Do nothing

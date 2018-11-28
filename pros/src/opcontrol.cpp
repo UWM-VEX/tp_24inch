@@ -28,11 +28,11 @@ void opcontrol() {
 
 		opcontrolLift.controllerSet(partner.get_analog(ANALOG_LEFT_Y) / 127.0);
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
 		{
 			robotClaw.set(127);
 		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 		{
 			robotClaw.set(-127);
 		}
@@ -41,22 +41,30 @@ void opcontrol() {
 			robotClaw.set(0);
 		}
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
+		if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) ||
+			partner.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
 			turnerAuto = false;
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT))
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP) ||
+			partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
 			turnerAuto = true;
 
 		if(turnerAuto)
 		{
-			robotTurner.rotate180(master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) && ! lastTurnerRotate);
+			robotTurner.rotate180((partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP)
+				|| partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) && ! lastTurnerRotate);
 
-			lastTurnerRotate = master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT);
+			lastTurnerRotate = partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP) ||
+								partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN);
 		}
 		else
 		{
-			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
+			if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
 			{
 				robotTurner.set(-30);
+			}
+			else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT))
+			{
+				robotTurner.set(30);
 			}
 			else
 			{
