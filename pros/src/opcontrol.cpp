@@ -22,19 +22,23 @@ void opcontrol() {
 
 	bool lastTurnerRotate = false;
 	bool turnerAuto = false;
+	bool lastClawClosed = false;
 
 	while (true) {
-		opcontrolDrive.tank(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
+		opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y))/127.0, (master.get_analog(ANALOG_RIGHT_Y))/127.0);
 
 		opcontrolLift.controllerSet(partner.get_analog(ANALOG_LEFT_Y) / 127.0);
 
 		if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
 		{
-			robotClaw.set(127);
+			robotClaw.set(60);
+			lastClawClosed = false;
 		}
-		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R2) ||
+			lastClawClosed)
 		{
 			robotClaw.set(-127);
+			lastClawClosed = true;
 		}
 		else
 		{
