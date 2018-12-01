@@ -24,3 +24,7 @@ const double dia_ball = 3.0;
 const double mass_ball = 55;
 const double h_short_post = 23.0;
 const double h_tall_post = 34.0;
+
+//Camera Properties
+const double vertical_fov = 47.0;
+const double horizontal_fov = 75.0;
