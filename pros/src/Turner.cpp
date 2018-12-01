@@ -28,7 +28,16 @@ bool Turner::rotate180(bool isFirstTime)
 {
 	if(isFirstTime)
 	{
-		driver->move_relative(2.75, 127);
+		if(turnForward)
+		{
+			driver->move_relative(2.75, 127);
+		}
+		else
+		{
+			driver->move_relative(-2.75, 127);
+		}
+
+		turnForward = ! turnForward;
 	}
 
 	return std::abs(driver->get_position() - driver->get_target_position()) < 0.05;

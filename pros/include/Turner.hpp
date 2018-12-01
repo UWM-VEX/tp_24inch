@@ -3,6 +3,7 @@
 
 class Turner{
 	pros::Motor* driver;
+	bool turnForward = true;
 public:
 	Turner();
 	void initTurner(int driverPort);
