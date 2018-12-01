@@ -15,17 +15,6 @@ using namespace okapi;
  */
 void autonomous()
 {
-	ChassisControllerIntegrated autoDrive = robotDrive.makeDrive();
-
-	auto profileController = AsyncControllerFactory::motionProfile(
-		0.75,  // Maximum linear velocity of the Chassis in m/s
-		1.0,  // Maximum linear acceleration of the Chassis in m/s/s
-		10.0, // Maximum linear jerk of the Chassis in m/s/s/s
-		autoDrive // Chassis Controller
-	);
-
-	autoDrive.setMaxVelocity(125);
-
 	AsyncPosIntegratedController autoLift = robotLift.makeLift();
 
 	bool firstTime = false;
@@ -36,25 +25,10 @@ void autonomous()
 
 		break;
 		case(TEST):
-			autoDrive.moveDistance(5_ft);
-			autoDrive.turnAngle(90_deg);
-			pros::delay(500);
-			autoDrive.turnAngle(-90_deg);
-			autoDrive.moveDistance(-5_ft);
-		break;
-		case(MOTION_PROFILE):
-			profileController.generatePath({
-			  okapi::Point{0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-			  okapi::Point{5_ft, -2_ft, 0_deg}}, // The next point in the profile, 3 feet forward
-			  "A" // Profile name
-			);
-
-			profileController.setTarget("A");
-
-			profileController.waitUntilSettled();
+			robotDrive.moveDistance(72);
 		break;
 		case(TWO_CAPS):
-			autoDrive.moveDistance(2_ft);
+			/*autoDrive.moveDistance(2_ft);
 			pros::delay(500);
 			autoDrive.moveDistance(-1_ft);
 			pros::delay(500);
@@ -73,7 +47,7 @@ void autonomous()
 			robotClaw.set(30);
 			pros::delay(500);
 			robotClaw.set(0);
-			autoDrive.moveDistance(-18_in);
+			autoDrive.moveDistance(-18_in);*/
 
 
 		break;

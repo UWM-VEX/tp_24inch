@@ -21,5 +21,5 @@ AsyncPosIntegratedController Lift::makeLift()
 	Motor left2(left2Motor);
 	Motor right2(right2Motor);
 
-	return AsyncControllerFactory::posIntegrated(leftMotor, rightMotor);
+	return AsyncControllerFactory::posIntegrated({leftMotor, left2Motor, rightMotor, right2Motor});
 }

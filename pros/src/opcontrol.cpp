@@ -17,7 +17,6 @@
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	pros::Controller partner(pros::E_CONTROLLER_PARTNER);
-	okapi::ChassisControllerIntegrated opcontrolDrive = robotDrive.makeDrive();
 	okapi::AsyncPosIntegratedController opcontrolLift = robotLift.makeLift();
 
 	bool lastTurnerRotate = false;
@@ -25,7 +24,7 @@ void opcontrol() {
 	bool lastClawClosed = false;
 
 	while (true) {
-		opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y))/127.0, (master.get_analog(ANALOG_RIGHT_Y))/127.0);
+		robotDrive.tankDrive((master.get_analog(ANALOG_LEFT_Y)), (master.get_analog(ANALOG_RIGHT_Y)));
 
 		opcontrolLift.controllerSet(partner.get_analog(ANALOG_LEFT_Y) / 127.0);
 
@@ -37,7 +36,7 @@ void opcontrol() {
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R2) ||
 			lastClawClosed)
 		{
-			robotClaw.set(-127);
+			robotClaw.set(-60);
 			lastClawClosed = true;
 		}
 		else
