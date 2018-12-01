@@ -1,6 +1,6 @@
 #include "main.h"
 
-using namespace okapi;
+using namespace pros;
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -15,8 +15,6 @@ using namespace okapi;
  */
 void autonomous()
 {
-	AsyncPosIntegratedController autoLift = robotLift.makeLift();
-
 	bool firstTime = false;
 
 	switch(autonomousInfoStruct.mode)
@@ -26,8 +24,11 @@ void autonomous()
 		break;
 		case(TEST):
 			robotDrive.moveDistance(72);
+			robotDrive.turnAngle(90);
 		break;
 		case(TWO_CAPS):
+			robotDrive.moveDistance(36, 127);
+			robotDrive.moveDistance(-18);
 			/*autoDrive.moveDistance(2_ft);
 			pros::delay(500);
 			autoDrive.moveDistance(-1_ft);

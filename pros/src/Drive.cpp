@@ -54,15 +54,39 @@ void Drive::tankDrive(int left, int right)
 	rearRight->move(right);
 }
 
-bool Drive::moveDistance(double distance)
+void Drive::moveDistance(double distance, int speed)
 {
-	int32_t velocity = (distance > 0) ? 90 : -90;
+	int32_t velocity = (distance > 0) ? speed : -speed;
 	double targetRotation = distance / (wheelDiameter * M_PI);
 
 	frontLeft->move_relative(targetRotation, velocity);
 	frontRight->move_relative(targetRotation, velocity);
 	rearLeft->move_relative(targetRotation, velocity);
 	rearRight->move_relative(targetRotation, velocity);
+
+	bool done = false;
+
+	while(!done)
+	{
+		std::cout << "Auto Looping" << std::endl;
+		done = (std::abs(frontLeft->get_position() - frontLeft->get_target_position()) < 0.05) &&
+		(std::abs(frontRight->get_position() - frontRight->get_target_position()) < 0.05) &&
+		(std::abs(rearLeft->get_position() - rearLeft->get_target_position()) < 0.05) &&
+		(std::abs(rearRight->get_position() - rearRight->get_target_position()) < 0.05);
+		delay(20);
+	}
+}
+
+void Drive::turnAngle(double angle, int speed)
+{
+	int32_t velocity = (angle > 0) ? speed : -speed;
+	double distanceToTurn = (angle / 360.0) * M_PI * wheelBaseWidth;
+	double targetRotation = distanceToTurn / (wheelDiameter * M_PI);
+
+	frontLeft->move_relative(targetRotation, velocity);
+	frontRight->move_relative(-targetRotation, velocity);
+	rearLeft->move_relative(targetRotation, velocity);
+	rearRight->move_relative(-targetRotation, velocity);
 
 	bool done = false;
 
