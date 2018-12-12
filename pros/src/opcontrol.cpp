@@ -29,14 +29,15 @@ void opcontrol() {
 
 		if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
 		{
-			robotClaw.set(60);
-			lastClawClosed = false;
+			//robotClaw.set(60);
+			//lastClawClosed = false;
+			robotClaw.open();
 		}
-		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R2) ||
-			lastClawClosed)
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 		{
-			robotClaw.set(-60);
-			lastClawClosed = true;
+			//robotClaw.set(-60);
+			//lastClawClosed = true;
+			robotClaw.close();
 		}
 		else
 		{
