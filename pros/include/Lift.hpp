@@ -10,6 +10,7 @@ public:
 	Lift();
 	void initLift(int leftPort, int rightPort, int left2Port, int right2Port);
 	void set(int speed);
+	void printMotorTemps();
 };
 
 extern Lift robotLift;

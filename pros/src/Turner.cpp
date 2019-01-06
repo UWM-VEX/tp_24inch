@@ -35,3 +35,8 @@ bool Turner::rotate180(bool isFirstTime)
 
 	return std::abs(driver->get_position() - driver->get_target_position()) < 0.05;
 }
+
+void Turner::printMotorTemps()
+{
+	lcd::print(0, "Turner: %f", driver->get_temperature());
+}

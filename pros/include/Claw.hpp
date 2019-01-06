@@ -10,6 +10,7 @@ public:
 	void set(int speed);
 	void open();
 	void close();
+	void printMotorTemps();
 };
 
 extern Claw robotClaw;

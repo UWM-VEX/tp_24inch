@@ -9,6 +9,7 @@ public:
 	void initTurner(int driverPort);
 	void set(int speed);
 	bool rotate180(bool isFirstTime);
+	void printMotorTemps();
 };
 
 extern Turner robotTurner;

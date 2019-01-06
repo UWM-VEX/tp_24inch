@@ -20,6 +20,7 @@ public:
 	void tankDrive(int left, int right);
 	void moveDistance(double distance, int speed = 90);
 	void turnAngle(double angle, int speed = 90);
+	void getMotorTemps();
 };
 
 extern Drive robotDrive;

@@ -16,8 +16,6 @@ void Claw::set(int speed)
 {
 	motor1->move(speed);
 	motor2->move(speed);
-
-	std::cout << "Motor 1: " << motor1->get_temperature() << std::endl;
 }
 
 void Claw::open()
@@ -30,4 +28,10 @@ void Claw::close()
 {
 	motor1->move_absolute(10, 127);
 	motor2->move_absolute(10, 127);
+}
+
+void Claw::printMotorTemps()
+{
+	lcd::print(0, "Motor 1: %f", motor1->get_temperature());
+	lcd::print(1, "Motor 2: %f", motor2->get_temperature());
 }

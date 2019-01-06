@@ -21,3 +21,11 @@ void Lift::set(int speed)
 	left2->move(speed);
 	right2->move(speed);
 }
+
+void Lift::printMotorTemps()
+{
+	lcd::print(0, "Left: %f", left->get_temperature());
+	lcd::print(1, "Right: %f", right->get_temperature());
+	lcd::print(2, "Left2: %f", left2->get_temperature());
+	lcd::print(3, "Right2: %f", right2->get_temperature());
+}
