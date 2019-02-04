@@ -21,6 +21,8 @@ void Drive::tankDrive(int left, int right)
 {
 	frontLeft->move(left);
 	frontRight->move(right);
+	middleLeft->move(left);
+	middleRight->move(right);
 	rearLeft->move(left);
 	rearRight->move(right);
 }
@@ -32,6 +34,8 @@ void Drive::moveDistance(double distance, int speed)
 
 	frontLeft->move_relative(targetRotation, velocity);
 	frontRight->move_relative(targetRotation, velocity);
+	middleLeft->move_relative(targetRotation, velocity);
+	middleRight->move_relative(targetRotation, velocity);
 	rearLeft->move_relative(targetRotation, velocity);
 	rearRight->move_relative(targetRotation, velocity);
 
@@ -42,6 +46,8 @@ void Drive::moveDistance(double distance, int speed)
 		std::cout << "Auto Looping" << std::endl;
 		done = (std::abs(frontLeft->get_position() - frontLeft->get_target_position()) < 0.05) &&
 		(std::abs(frontRight->get_position() - frontRight->get_target_position()) < 0.05) &&
+		(std::abs(middleLeft->get_position() - middleLeft->get_target_position()) < 0.05) &&
+		(std::abs(middleRight->get_position() - middleRight->get_target_position()) < 0.05) &&
 		(std::abs(rearLeft->get_position() - rearLeft->get_target_position()) < 0.05) &&
 		(std::abs(rearRight->get_position() - rearRight->get_target_position()) < 0.05);
 		delay(20);
@@ -56,6 +62,8 @@ void Drive::turnAngle(double angle, int speed)
 
 	frontLeft->move_relative(targetRotation, velocity);
 	frontRight->move_relative(-targetRotation, velocity);
+	middleLeft->move_relative(targetRotation, velocity);
+	middleRight->move_relative(-targetRotation, velocity);
 	rearLeft->move_relative(targetRotation, velocity);
 	rearRight->move_relative(-targetRotation, velocity);
 
@@ -66,6 +74,8 @@ void Drive::turnAngle(double angle, int speed)
 		std::cout << "Auto Looping" << std::endl;
 		done = (std::abs(frontLeft->get_position() - frontLeft->get_target_position()) < 0.05) &&
 		(std::abs(frontRight->get_position() - frontRight->get_target_position()) < 0.05) &&
+		(std::abs(middleLeft->get_position() - middleLeft->get_target_position()) < 0.05) &&
+		(std::abs(middleRight->get_position() - middleRight->get_target_position()) < 0.05) &&
 		(std::abs(rearLeft->get_position() - rearLeft->get_target_position()) < 0.05) &&
 		(std::abs(rearRight->get_position() - rearRight->get_target_position()) < 0.05);
 		delay(20);
@@ -76,6 +86,8 @@ void Drive::getMotorTemps()
 {
 	lcd::print(0, "FL: %f", frontLeft->get_temperature());
 	lcd::print(1, "FR: %f", frontRight->get_temperature());
-	lcd::print(2, "RL: %f", rearLeft->get_temperature());
-	lcd::print(3, "RR: %f", rearRight->get_temperature());
+	lcd::print(2, "ML: %f", middleLeft->get_temperature());
+	lcd::print(3, "MR: %f", middleRight->get_temperature());
+	lcd::print(4, "RL: %f", rearLeft->get_temperature());
+	lcd::print(5, "RR: %f", rearRight->get_temperature());
 }

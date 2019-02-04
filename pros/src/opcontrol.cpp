@@ -18,61 +18,31 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	pros::Controller partner(pros::E_CONTROLLER_PARTNER);
 
-	bool lastTurnerRotate = false;
-	bool turnerAuto = false;
-	bool lastClawClosed = false;
+	bool flipperAuto = false;
 
 	while (true) {
 		robotDrive.tankDrive((master.get_analog(ANALOG_LEFT_Y)), (master.get_analog(ANALOG_RIGHT_Y)));
 
 		robotLift.set(partner.get_analog(ANALOG_LEFT_Y));
 
-		if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		if(std::abs(partner.get_analog(ANALOG_RIGHT_Y)) > 20)
 		{
-			//robotClaw.set(60);
-			//lastClawClosed = false;
-			robotClaw.open();
+			robotFlipper.set(partner.get_analog(ANALOG_RIGHT_Y));
+			flipperAuto = false;
+		}
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		{
+			robotFlipper.up();
+			flipperAuto = true;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 		{
-			//robotClaw.set(-60);
-			//lastClawClosed = true;
-			robotClaw.close();
+			robotFlipper.down();
+			flipperAuto = true;
 		}
-		else
+		else if(!flipperAuto)
 		{
-			robotClaw.set(0);
-		}
-
-		if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) ||
-			partner.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
-			turnerAuto = false;
-		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP) ||
-			partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
-			turnerAuto = true;
-
-		if(turnerAuto)
-		{
-			robotTurner.rotate180((partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP)
-				|| partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) && ! lastTurnerRotate);
-
-			lastTurnerRotate = partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP) ||
-								partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN);
-		}
-		else
-		{
-			if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
-			{
-				robotTurner.set(-30);
-			}
-			else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT))
-			{
-				robotTurner.set(30);
-			}
-			else
-			{
-				robotTurner.set(0);
-			}
+			robotFlipper.set(0);
 		}
 		
 		pros::delay(20);

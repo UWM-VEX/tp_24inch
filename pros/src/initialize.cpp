@@ -129,10 +129,9 @@ void lcdModeSelect()
  */
 void initialize() 
 {
-	robotDrive.initDrive(15,-16,1,-2,12,-11);
-	robotLift.initLift(-14, 13, -20, 19);
-	robotTurner.initTurner(-17);
-	robotClaw.initClaw(18, 3);
+	robotDrive.initDrive(3,-13,2,-12,1,-11);
+	robotLift.initLift(-5, 15, -4, 14);
+	robotFlipper.initFlipper(-16, 17);
 
 	lcdModeSelect();
 }

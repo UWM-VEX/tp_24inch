@@ -60,8 +60,7 @@
 #include "auto.hpp"
 #include "Drive.hpp"
 #include "Lift.hpp"
-#include "Claw.hpp"
-#include "Turner.hpp"
+#include "Flipper.hpp"
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure
