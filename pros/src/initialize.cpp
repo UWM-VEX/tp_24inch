@@ -133,7 +133,7 @@ void initialize()
 
 	robotDrive.initDrive(3,-13,2,-12,1,-11);
 	robotLift.initLift(-5, 15, -4, 14);
-	robotFlipper.initFlipper(-16, 17);
+	robotFlipper.initFlipper(-16, 18);
 
 	lcdModeSelect();
 }

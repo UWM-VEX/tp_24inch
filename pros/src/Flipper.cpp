@@ -20,14 +20,14 @@ void Flipper::set(int speed)
 
 void Flipper::down()
 {
-	motor1->move_absolute(0, 127);
-	motor2->move_absolute(0, 127);
+	motor1->move_absolute(-840, 127);
+	motor2->move_absolute(-840, 127);
 }
 
 void Flipper::up()
 {
-	motor1->move_absolute(450, 127);
-	motor2->move_absolute(450, 127);
+	motor1->move_absolute(-380, 127);
+	motor2->move_absolute(-380, 127);
 }
 
 void Flipper::printMotorTemps()
