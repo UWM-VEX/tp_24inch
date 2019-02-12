@@ -31,13 +31,6 @@ void autonomous()
 
 	profileController->startThread();
 
-	/*profileController = new AsyncMotionProfileController(
-		0.75,  // Maximum linear velocity of the Chassis in m/s
-		1.0,  // Maximum linear acceleration of the Chassis in m/s/s
-		10.0, // Maximum linear jerk of the Chassis in m/s/s/s
-		autoDrive // Chassis Controller
-	);*/
-
 	bool firstTime = false;
 
 	autoDrive.setMaxVelocity(125);
