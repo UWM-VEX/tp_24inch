@@ -2,6 +2,45 @@
 
 using namespace okapi;
 
+void turnAngleGyro(double angle, ChassisControllerIntegrated* drive)
+{
+	pros::lcd::initialize();
+
+	const double kP = 0.005;
+	const double kI = 0.07;
+	const double kD = 10;
+
+	uint32_t timeAtAngle = 0;
+
+	auto controller = IterativeControllerFactory::posPID(kP, kI, kD);
+	ADIGyro gyro(1, 0.1);
+	gyro.reset();
+
+	controller.setTarget(angle);
+	
+	do
+	{
+		double newInput = gyro.get();
+		double newOutput = controller.step(newInput);
+		drive->arcade(0, newOutput);
+
+		pros::lcd::print(0, "Gyro: %f", newInput);
+
+		pros::Task::delay(20);
+
+		if(std::abs(newInput - angle) < 1 && timeAtAngle == 0)
+		{
+			timeAtAngle = pros::millis();
+		}
+		else if(std::abs(newInput - angle) >= 1)
+		{
+			timeAtAngle = 0;
+		}
+	}while(!(pros::millis() - timeAtAngle > 250 && timeAtAngle != 0));
+
+	drive->stop();
+}
+
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -41,7 +80,7 @@ void autonomous()
 
 		break;
 		case(TEST):
-			profileController->generatePath({
+			/*profileController->generatePath({
 			  okapi::Point{0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
 			  okapi::Point{3_ft, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 			  "A" // Profile name
@@ -59,7 +98,9 @@ void autonomous()
 
 			profileController->setTarget("B");
 
-			profileController->waitUntilSettled();
+			profileController->waitUntilSettled();*/
+
+			turnAngleGyro(90, &autoDrive);
 		break;
 		default:
 		// Do nothing
