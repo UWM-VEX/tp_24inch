@@ -4,8 +4,6 @@ using namespace okapi;
 
 void turnAngleGyro(double angle, ChassisControllerIntegrated* drive)
 {
-	pros::lcd::initialize();
-
 	const double kP = 0.005;
 	const double kI = 0.07;
 	const double kD = 10;
@@ -23,8 +21,6 @@ void turnAngleGyro(double angle, ChassisControllerIntegrated* drive)
 		double newInput = gyro.get();
 		double newOutput = controller.step(newInput);
 		drive->arcade(0, newOutput);
-
-		pros::lcd::print(0, "Gyro: %f", newInput);
 
 		pros::Task::delay(20);
 
