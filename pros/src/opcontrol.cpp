@@ -18,10 +18,12 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	pros::Controller partner(pros::E_CONTROLLER_PARTNER);
 
+	okapi::ChassisControllerIntegrated opcontrolDrive = robotDrive.makeDrive();
+
 	bool flipperAuto = false;
 
 	while (true) {
-		robotDrive.tankDrive((master.get_analog(ANALOG_LEFT_Y)), (master.get_analog(ANALOG_RIGHT_Y)));
+		opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y))/127.0, (master.get_analog(ANALOG_RIGHT_Y))/127.0);
 
 		robotLift.set(partner.get_analog(ANALOG_LEFT_Y));
 

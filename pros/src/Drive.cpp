@@ -1,93 +1,34 @@
 #include "main.h"
 #include <cmath>
 
-using namespace pros;
+using namespace okapi;
 
 Drive robotDrive;
 
 Drive::Drive() {}
 
-void Drive::initDrive(int frontLeftPort, int frontRightPort, int middleLeftPort, int middleRightPort, int rearLeftPort, int rearRightPort)
+void Drive::initDrive(int8_t frontLeftPort, int8_t frontRightPort, int8_t middleLeftPort, int8_t middleRightPort, int8_t rearLeftPort, int8_t rearRightPort)
 {
-	frontLeft = new Motor((std::uint8_t) abs(frontLeftPort), E_MOTOR_GEARSET_18, frontLeftPort < 0, E_MOTOR_ENCODER_ROTATIONS);
-	frontRight = new Motor((std::uint8_t) abs(frontRightPort), E_MOTOR_GEARSET_18, frontRightPort < 0, E_MOTOR_ENCODER_ROTATIONS);
-	middleLeft = new Motor((std::uint8_t) abs(middleLeftPort), E_MOTOR_GEARSET_18, middleLeftPort < 0, E_MOTOR_ENCODER_ROTATIONS);
-	middleRight = new Motor((std::uint8_t) abs(middleRightPort), E_MOTOR_GEARSET_18, middleRightPort < 0, E_MOTOR_ENCODER_ROTATIONS);
-	rearLeft = new Motor((std::uint8_t) abs(rearLeftPort), E_MOTOR_GEARSET_18, rearLeftPort < 0, E_MOTOR_ENCODER_ROTATIONS);
-	rearRight = new Motor((std::uint8_t) abs(rearRightPort), E_MOTOR_GEARSET_18, rearRightPort < 0, E_MOTOR_ENCODER_ROTATIONS);
+	frontLeft = frontLeftPort;
+	frontRight = frontRightPort;
+	middleLeft = middleLeftPort;
+	middleRight = middleRightPort;
+	rearLeft = rearLeftPort;
+	rearRight = rearRightPort;
 }
 
-void Drive::tankDrive(int left, int right)
+okapi::ChassisControllerIntegrated Drive::makeDrive()
 {
-	frontLeft->move(left);
-	frontRight->move(right);
-	middleLeft->move(left);
-	middleRight->move(right);
-	rearLeft->move(left);
-	rearRight->move(right);
-}
+	/*Motor fl(frontLeft);
+	Motor fr(frontRight);
+	Motor ml(middleLeft);
+	Motor mr(middleRight);
+	Motor rl(rearLeft);
+	Motor rr(rearRight);*/
 
-void Drive::moveDistance(double distance, int speed)
-{
-	int32_t velocity = (distance > 0) ? speed : -speed;
-	double targetRotation = distance / (wheelDiameter * M_PI);
-
-	frontLeft->move_relative(targetRotation, velocity);
-	frontRight->move_relative(targetRotation, velocity);
-	middleLeft->move_relative(targetRotation, velocity);
-	middleRight->move_relative(targetRotation, velocity);
-	rearLeft->move_relative(targetRotation, velocity);
-	rearRight->move_relative(targetRotation, velocity);
-
-	bool done = false;
-
-	while(!done)
-	{
-		std::cout << "Auto Looping" << std::endl;
-		done = (std::abs(frontLeft->get_position() - frontLeft->get_target_position()) < 0.05) &&
-		(std::abs(frontRight->get_position() - frontRight->get_target_position()) < 0.05) &&
-		(std::abs(middleLeft->get_position() - middleLeft->get_target_position()) < 0.05) &&
-		(std::abs(middleRight->get_position() - middleRight->get_target_position()) < 0.05) &&
-		(std::abs(rearLeft->get_position() - rearLeft->get_target_position()) < 0.05) &&
-		(std::abs(rearRight->get_position() - rearRight->get_target_position()) < 0.05);
-		delay(20);
-	}
-}
-
-void Drive::turnAngle(double angle, int speed)
-{
-	int32_t velocity = (angle > 0) ? speed : -speed;
-	double distanceToTurn = (angle / 360.0) * M_PI * wheelBaseWidth;
-	double targetRotation = distanceToTurn / (wheelDiameter * M_PI);
-
-	frontLeft->move_relative(targetRotation, velocity);
-	frontRight->move_relative(-targetRotation, velocity);
-	middleLeft->move_relative(targetRotation, velocity);
-	middleRight->move_relative(-targetRotation, velocity);
-	rearLeft->move_relative(targetRotation, velocity);
-	rearRight->move_relative(-targetRotation, velocity);
-
-	bool done = false;
-
-	while(!done)
-	{
-		std::cout << "Auto Looping" << std::endl;
-		done = (std::abs(frontLeft->get_position() - frontLeft->get_target_position()) < 0.05) &&
-		(std::abs(frontRight->get_position() - frontRight->get_target_position()) < 0.05) &&
-		(std::abs(middleLeft->get_position() - middleLeft->get_target_position()) < 0.05) &&
-		(std::abs(middleRight->get_position() - middleRight->get_target_position()) < 0.05) &&
-		(std::abs(rearLeft->get_position() - rearLeft->get_target_position()) < 0.05) &&
-		(std::abs(rearRight->get_position() - rearRight->get_target_position()) < 0.05);
-		delay(20);
-	}
-}
-
-void Drive::getMotorTemps()
-{
-	lcd::print(0, "FL: %f", frontLeft->get_temperature());
-	lcd::print(1, "FR: %f", frontRight->get_temperature());
-	lcd::print(2, "ML: %f", middleLeft->get_temperature());
-	lcd::print(3, "MR: %f", middleRight->get_temperature());
-	lcd::print(4, "RL: %f", rearLeft->get_temperature());
-	lcd::print(5, "RR: %f", rearRight->get_temperature());
+	return ChassisControllerFactory::create(
+		  {frontLeft, middleLeft, rearLeft}, {frontRight, middleRight, rearRight},
+		  AbstractMotor::gearset::green,
+		  {4_in, 15_in}
+		);
 }

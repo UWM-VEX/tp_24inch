@@ -5,22 +5,16 @@
 
 class Drive{
 private:
-	pros::Motor* frontLeft;
-	pros::Motor* frontRight;
-	pros::Motor* middleLeft;
-	pros::Motor* middleRight;
-	pros::Motor* rearLeft;
-	pros::Motor* rearRight;
-
-	const double wheelDiameter = 4.0;
-	const double wheelBaseWidth = 15.0;
+	int8_t frontLeft;
+	int8_t frontRight;
+	int8_t middleLeft;
+	int8_t middleRight;
+	int8_t rearLeft;
+	int8_t rearRight;
 public:
 	Drive();
-	void initDrive(int frontLeftPort, int frontRightPort, int middleLeftPort, int middleRightPort, int rearLeftPort, int rearRightPort);
-	void tankDrive(int left, int right);
-	void moveDistance(double distance, int speed = 90);
-	void turnAngle(double angle, int speed = 90);
-	void getMotorTemps();
+	void initDrive(int8_t frontLeftPort, int8_t frontRightPort, int8_t middleLeftPort, int8_t middleRightPort, int8_t rearLeftPort, int8_t rearRightPort);
+	okapi::ChassisControllerIntegrated makeDrive();
 };
 
 extern Drive robotDrive;

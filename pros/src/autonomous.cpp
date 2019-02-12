@@ -1,6 +1,6 @@
 #include "main.h"
 
-using namespace pros;
+using namespace okapi;
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -15,7 +15,18 @@ using namespace pros;
  */
 void autonomous()
 {
+	ChassisControllerIntegrated autoDrive = robotDrive.makeDrive();
+
+	auto profileController = AsyncControllerFactory::motionProfile(
+		0.75,  // Maximum linear velocity of the Chassis in m/s
+		1.0,  // Maximum linear acceleration of the Chassis in m/s/s
+		10.0, // Maximum linear jerk of the Chassis in m/s/s/s
+		autoDrive // Chassis Controller
+	);
+
 	bool firstTime = false;
+
+	autoDrive.setMaxVelocity(125);
 
 	switch(autonomousInfoStruct.mode)
 	{
@@ -23,34 +34,15 @@ void autonomous()
 
 		break;
 		case(TEST):
-			robotDrive.moveDistance(72);
-			robotDrive.turnAngle(90);
-		break;
-		case(TWO_CAPS):
-			robotDrive.moveDistance(36, 127);
-			robotDrive.moveDistance(-18);
-			/*autoDrive.moveDistance(2_ft);
-			pros::delay(500);
-			autoDrive.moveDistance(-1_ft);
-			pros::delay(500);
-			autoDrive.turnAngle(60_deg);
-			pros::delay(500);
-			autoDrive.moveDistance(2_ft);
-			robotClaw.set(-127);
-			pros::delay(500);
+			profileController.generatePath({
+			  okapi::Point{0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+			  okapi::Point{5_ft, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "A" // Profile name
+			);
 
-			while(!robotTurner.rotate180(firstTime))
-			{
-				firstTime = false;
-				pros::delay(20);
-			}
+			profileController.setTarget("A");
 
-			robotClaw.set(30);
-			pros::delay(500);
-			robotClaw.set(0);
-			autoDrive.moveDistance(-18_in);*/
-
-
+			profileController.waitUntilSettled();
 		break;
 		default:
 		// Do nothing
