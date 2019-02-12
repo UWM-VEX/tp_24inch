@@ -17,12 +17,26 @@ void autonomous()
 {
 	ChassisControllerIntegrated autoDrive = robotDrive.makeDrive();
 
-	auto profileController = AsyncControllerFactory::motionProfile(
+	AsyncMotionProfileController* profileController;
+
+	profileController = new AsyncMotionProfileController(
+		TimeUtilFactory::create(),
+		1.0,  // Maximum linear velocity of the Chassis in m/s
+		1.0,  // Maximum linear acceleration of the Chassis in m/s/s
+		10.0, // Maximum linear jerk of the Chassis in m/s/s/s
+		autoDrive.getChassisModel(), // Chassis Controller
+		autoDrive.getChassisScales(),
+		autoDrive.getGearsetRatioPair()
+	);
+
+	profileController->startThread();
+
+	/*profileController = new AsyncMotionProfileController(
 		0.75,  // Maximum linear velocity of the Chassis in m/s
 		1.0,  // Maximum linear acceleration of the Chassis in m/s/s
 		10.0, // Maximum linear jerk of the Chassis in m/s/s/s
 		autoDrive // Chassis Controller
-	);
+	);*/
 
 	bool firstTime = false;
 
@@ -34,15 +48,25 @@ void autonomous()
 
 		break;
 		case(TEST):
-			profileController.generatePath({
+			profileController->generatePath({
 			  okapi::Point{0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-			  okapi::Point{5_ft, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  okapi::Point{3_ft, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 			  "A" // Profile name
 			);
 
-			profileController.setTarget("A");
+			profileController->generatePath({
+			  okapi::Point{0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+			  okapi::Point{2_ft, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "B" // Profile name
+			);
 
-			profileController.waitUntilSettled();
+			profileController->setTarget("A");
+
+			profileController->waitUntilSettled();
+
+			profileController->setTarget("B");
+
+			profileController->waitUntilSettled();
 		break;
 		default:
 		// Do nothing
