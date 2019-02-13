@@ -19,13 +19,6 @@ void Drive::initDrive(int8_t frontLeftPort, int8_t frontRightPort, int8_t middle
 
 okapi::ChassisControllerIntegrated Drive::makeDrive()
 {
-	/*Motor fl(frontLeft);
-	Motor fr(frontRight);
-	Motor ml(middleLeft);
-	Motor mr(middleRight);
-	Motor rl(rearLeft);
-	Motor rr(rearRight);*/
-
 	return ChassisControllerFactory::create(
 		  {frontLeft, middleLeft, rearLeft}, {frontRight, middleRight, rearRight},
 		  AbstractMotor::gearset::green,

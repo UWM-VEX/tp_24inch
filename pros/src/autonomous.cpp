@@ -76,7 +76,7 @@ void autonomous()
 
 		break;
 		case(TEST):
-			/*profileController->generatePath({
+			profileController->generatePath({
 			  okapi::Point{0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
 			  okapi::Point{3_ft, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 			  "A" // Profile name
@@ -94,7 +94,7 @@ void autonomous()
 
 			profileController->setTarget("B");
 
-			profileController->waitUntilSettled();*/
+			profileController->waitUntilSettled();
 
 			turnAngleGyro(90, &autoDrive);
 		break;
