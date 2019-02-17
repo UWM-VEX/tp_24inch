@@ -3,6 +3,7 @@
 
 #define DO_NOTHING 0
 #define TEST 1
+#define TWO_CAPS 2
 
 struct AutonomousInfo {
 

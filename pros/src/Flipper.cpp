@@ -35,9 +35,11 @@ bool Flipper::isDown()
 
 void Flipper::downBlocking()
 {
+	uint32_t startTime = pros::millis();
+
 	do{
 		down();
-	}while(!isDown());
+	}while(!isDown() && pros::millis() - startTime < 2000);
 }
 
 void Flipper::up()
@@ -54,9 +56,10 @@ bool Flipper::isUp()
 
 void Flipper::upBlocking()
 {
+	uint32_t startTime = pros::millis();
 	do{
 		up();
-	}while(!isUp());
+	}while(!isUp() && pros::millis() - startTime < 2000);
 }
 
 void Flipper::printMotorTemps()

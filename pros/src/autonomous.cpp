@@ -2,26 +2,44 @@
 
 using namespace okapi;
 
-void turnAngleGyro(double angle, ChassisControllerIntegrated* drive)
+void turnAngleGyro(double angle, ChassisControllerIntegrated* drive, double maxSpeed = 0.5)
 {
-	const double kP = 0.005;
-	const double kI = 0.07;
-	const double kD = 10;
+	pros::lcd::initialize();
 
 	uint32_t timeAtAngle = 0;
 
-	auto controller = IterativeControllerFactory::posPID(kP, kI, kD);
-	ADIGyro gyro(1, 0.1);
+	ADIGyro gyro(1, 0.092);
 	gyro.reset();
 
-	controller.setTarget(angle);
+	double newOutput;
+	double newInput;
 	
 	do
 	{
-		double newInput = gyro.get();
-		double newOutput = controller.step(newInput);
+		newInput = gyro.get();
+
+		if(std::abs(newInput - angle) > 10)
+		{
+			newOutput = 0.5;
+		}
+		else if(std::abs(newInput - angle) > 1)
+		{
+			newOutput = 0.2;
+		}
+		else
+		{
+			newOutput = 0;
+		}
+
+		if(angle - newInput < 0)
+		{
+			newOutput *= -1;
+		}
+
 		drive->arcade(0, newOutput);
 
+
+		pros::lcd::print(0, "Gyro: %f", newInput);
 		pros::Task::delay(20);
 
 		if(std::abs(newInput - angle) < 1 && timeAtAngle == 0)
@@ -97,6 +115,78 @@ void autonomous()
 			profileController->waitUntilSettled();
 
 			turnAngleGyro(90, &autoDrive);
+		break;
+		case(TWO_CAPS):
+			robotFlipper.downBlocking();
+
+			profileController->generatePath({
+			  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+			  okapi::Point{40_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "cap1" // Profile name
+			);
+
+			profileController->setTarget("cap1", false);
+			profileController->waitUntilSettled();
+
+			profileController->removePath("cap1");
+
+			// go to travel height
+
+			profileController->generatePath({
+			  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+			  okapi::Point{16_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "back1" // Profile name
+			);
+
+			profileController->setTarget("back1", true);
+			profileController->waitUntilSettled();
+
+			profileController->removePath("back1");
+
+			turnAngleGyro(-60, &autoDrive);
+
+			// go to low pole height
+
+			robotFlipper.upBlocking();
+
+			profileController->generatePath({
+			  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+			  okapi::Point{6_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "pole1" // Profile name
+			);
+
+			profileController->setTarget("pole1", false);
+			profileController->waitUntilSettled();
+
+			profileController->removePath("pole1");
+
+			// Lift down
+
+			profileController->generatePath({
+				okapi::Point{0_in, 0_ft, 0_deg},
+				okapi::Point{14_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "back2"
+			);
+
+			profileController->setTarget("back2", true);
+			profileController->waitUntilSettled();
+
+			profileController->removePath("back2");
+
+			turnAngleGyro (90, &autoDrive);
+
+			profileController->generatePath({
+				okapi::Point{0_in, 0_ft, 0_deg},
+				okapi::Point{24_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "cap2"
+			);
+
+			profileController->setTarget("cap2", false);
+			profileController->waitUntilSettled();
+
+			profileController->removePath("cap2");
+
+
 		break;
 		default:
 		// Do nothing
