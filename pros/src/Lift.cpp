@@ -22,6 +22,54 @@ void Lift::set(int speed)
 	right2->move(speed);
 }
 
+void Lift::travelh()
+{
+left->move_absolute(-50, 127);
+left2->move_absolute(-50, 127);
+right->move_absolute(-50, 127);
+right2->move_absolute(-50, 127);
+}
+
+void Lift::zeroh()
+{
+left->move_absolute(0, 127);
+left2->move_absolute(0, 127);
+right->move_absolute(0, 127);
+right2->move_absolute(0, 127);
+}
+
+void Lift::lowposth()
+{
+left->move_absolute(-550, 127);
+left2->move_absolute(-550, 127);
+right->move_absolute(-550, 127);
+right2->move_absolute(-550, 127);
+}
+
+void Lift::lowpostfliph()
+{
+left->move_absolute(-300, 127);
+left2->move_absolute(-300, 127);
+right->move_absolute(-300, 127);
+right2->move_absolute(-300, 127);
+}
+
+void Lift::highposth()
+{
+left->move_absolute(-875, 127);
+left2->move_absolute(-875, 127);
+right->move_absolute(-875, 127);
+right2->move_absolute(-875, 127);
+}
+
+void Lift::highpostfliph()
+{
+left->move_absolute(-550, 127);
+left2->move_absolute(-550, 127);
+right->move_absolute(-550, 127);
+right2->move_absolute(-550, 127);
+}
+
 void Lift::printMotorTemps()
 {
 	lcd::print(0, "Left: %f", left->get_temperature());
