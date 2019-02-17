@@ -18,15 +18,48 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	pros::Controller partner(pros::E_CONTROLLER_PARTNER);
 
-	okapi::ChassisControllerIntegrated opcontrolDrive = robotDrive.makeDrive();
-
 	bool flipperAuto = false;
+	bool liftAuto = false;
 
 	while (true) {
-		opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y))/127.0, (master.get_analog(ANALOG_RIGHT_Y))/127.0);
+		robotDrive.tankDrive((master.get_analog(ANALOG_LEFT_Y)), (master.get_analog(ANALOG_RIGHT_Y)));
 
-		robotLift.set(partner.get_analog(ANALOG_LEFT_Y));
-
+		if(std::abs(partner.get_analog(ANALOG_LEFT-Y)) > 20)
+		{
+			robotLift.set(partner.get_analog(ANALOG_LEFT_Y));
+			liftAuto = false;
+		}
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+		{
+			robotLift.zeroh();
+			flipperAuto = true;
+		}
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
+		{
+			robotLift.travelh();
+			flipperAuto = true;
+		}
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP))
+		{
+			robotLift.highposth();
+			flipperAuto = true;
+		}
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
+		{
+			robotLift.highpostfliph();
+			flipperAuto = true;
+		}
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
+		{
+			robotLift.lowposth();
+			flipperAuto = true;
+		}
+		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT))
+		{
+			robotLift.lowpostfliph();
+			flipperAuto = true;
+		}
+		
 		if(std::abs(partner.get_analog(ANALOG_RIGHT_Y)) > 20)
 		{
 			robotFlipper.set(partner.get_analog(ANALOG_RIGHT_Y));
