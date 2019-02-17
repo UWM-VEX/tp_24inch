@@ -15,7 +15,8 @@ public:
 	void lowposth();
 	void lowpostfliph();
 	void highposth();
-	void highpostflip();
+	void highpostfliph();
+	bool waitForTarget();
 	void printMotorTemps();
 };
 

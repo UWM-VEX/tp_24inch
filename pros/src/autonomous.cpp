@@ -130,7 +130,8 @@ void autonomous()
 
 			profileController->removePath("cap1");
 
-			// go to travel height
+			robotLift.travelh();
+			robotLift.waitForTarget();
 
 			profileController->generatePath({
 			  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
@@ -145,7 +146,8 @@ void autonomous()
 
 			turnAngleGyro(-60, &autoDrive);
 
-			// go to low pole height
+			robotLift.lowpostfliph();
+			robotLift.waitForTarget();
 
 			robotFlipper.upBlocking();
 
@@ -160,7 +162,8 @@ void autonomous()
 
 			profileController->removePath("pole1");
 
-			// Lift down
+			robotLift.lowposth();
+			robotLift.waitForTarget();
 
 			profileController->generatePath({
 				okapi::Point{0_in, 0_ft, 0_deg},
@@ -172,6 +175,9 @@ void autonomous()
 			profileController->waitUntilSettled();
 
 			profileController->removePath("back2");
+
+			robotLift.zeroh();
+			robotLift.waitForTarget();
 
 			turnAngleGyro (90, &autoDrive);
 
