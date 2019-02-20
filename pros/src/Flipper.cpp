@@ -11,8 +11,8 @@ void Flipper::initFlipper(int motor1Port, int motor2Port)
 	motor1 = new Motor((std::uint8_t) abs(motor1Port), E_MOTOR_GEARSET_18, motor1Port < 0, E_MOTOR_ENCODER_DEGREES);
 	motor2 = new Motor((std::uint8_t) abs(motor2Port), E_MOTOR_GEARSET_18, motor2Port < 0, E_MOTOR_ENCODER_DEGREES);
 
-	UP_POSITION = -840;
-	DOWN_POSITION = -380;
+	UP_POSITION = 840;
+	DOWN_POSITION = 380;
 }
 
 void Flipper::set(int speed)
