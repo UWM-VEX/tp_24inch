@@ -162,7 +162,7 @@ void autonomous()
 
 			profileController->removePath("pole1");
 
-			robotLift.lowposth();
+			robotLift.afterScore();
 			robotLift.waitForTarget();
 
 			profileController->generatePath({
@@ -178,7 +178,9 @@ void autonomous()
 
 			robotLift.zeroh();
 			robotLift.waitForTarget();
-
+			
+			robotFlipper.downBlocking();
+			
 			turnAngleGyro (90, &autoDrive);
 
 			profileController->generatePath({
@@ -192,7 +194,69 @@ void autonomous()
 
 			profileController->removePath("cap2");
 
+			robotLift.travelh();
+			robotLift.waitForTarget();
 
+			turnAngleGyro(-90, &autoDrive);
+
+			profileController->generatePath({
+				okapi::Point{0_in, 0_ft, 0_deg},
+				okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "lineToPole"
+			);
+
+			profileController->setTarget("lineToPole", false);
+			profileController->waitUntilSettled();
+
+			profileController->removePath("lineToPole");
+
+			turnAngleGyro(-90, &autoDrive);
+
+			profileController->generatePath({
+				okapi::Point{0_in, 0_ft, 0_deg},
+				okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "lineToPole"
+			);
+
+			profileController->setTarget("lineToPole", false);
+
+			robotLift.lowposth();
+
+			profileController->waitUntilSettled();
+			robotLift.waitForTarget();
+
+			profileController->removePath("lineToPole");
+
+			robotLift.afterScore();
+			robotLift.waitForTarget();
+
+			profileController->generatePath({
+				okapi::Point{0_in, 0_ft, 0_deg},
+				okapi::Point{36_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "backToPlatform"
+			);
+
+			profileController->setTarget("backToPlatform", true);
+
+			robotLift.travelh();
+
+			profileController->waitUntilSettled();
+			robotLift.waitForTarget();
+
+			profileController->removePath("backToPlatform");
+
+			turnAngleGyro(90, &autoDrive);
+
+			profileController->generatePath({
+				okapi::Point{0_in, 0_ft, 0_deg},
+				okapi::Point{36_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+			  "onPlatform"
+			);
+
+			profileController->setTarget("onPlatform", true);
+			profileController->waitUntilSettled();
+
+			profileController->removePath("onPlatform");
 		break;
 		default:
 		// Do nothing

@@ -30,6 +30,14 @@ right->move_absolute(50, 127);
 right2->move_absolute(50, 127);
 }
 
+void Lift::afterScore()
+{
+left->move_relative(-100, 127);
+left2->move_relative(-100, 127);
+right->move_relative(-100, 127);
+right2->move_relative(-100, 127);
+}
+
 void Lift::zeroh()
 {
 left->move_absolute(0, 127);

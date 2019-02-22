@@ -11,6 +11,7 @@ public:
 	void initLift(int leftPort, int rightPort, int left2Port, int right2Port);
 	void set(int speed);
 	void travelh();
+	void afterScore();
 	void zeroh();
 	void lowposth();
 	void lowpostfliph();
