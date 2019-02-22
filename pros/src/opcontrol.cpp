@@ -24,7 +24,14 @@ void opcontrol() {
 	bool liftAuto = false;
 
 	while (true) {
-		opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y))/127.0, (master.get_analog(ANALOG_RIGHT_Y))/127.0);
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
+		{
+			opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y) * 0.3)/127.0, (master.get_analog(ANALOG_RIGHT_Y) * 0.3)/127.0);
+		}
+		else
+		{
+			opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y))/127.0, (master.get_analog(ANALOG_RIGHT_Y))/127.0);
+		}
 
 		if(std::abs(partner.get_analog(ANALOG_LEFT_Y)) > 20)
 		{
@@ -34,32 +41,36 @@ void opcontrol() {
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
 		{
 			robotLift.zeroh();
-			flipperAuto = true;
+			liftAuto = true;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
 		{
 			robotLift.travelh();
-			flipperAuto = true;
+			liftAuto = true;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_UP))
 		{
 			robotLift.highposth();
-			flipperAuto = true;
+			liftAuto = true;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
 		{
 			robotLift.highpostfliph();
-			flipperAuto = true;
+			liftAuto = true;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
 		{
 			robotLift.lowposth();
-			flipperAuto = true;
+			liftAuto = true;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT))
 		{
 			robotLift.lowpostfliph();
-			flipperAuto = true;
+			liftAuto = true;
+		}
+		else if(!liftAuto)
+		{
+			robotLift.set(0);
 		}
 		
 		if(std::abs(partner.get_analog(ANALOG_RIGHT_Y)) > 20)
