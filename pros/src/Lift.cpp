@@ -24,18 +24,18 @@ void Lift::set(int speed)
 
 void Lift::travelh()
 {
-left->move_absolute(50, 127);
-left2->move_absolute(50, 127);
-right->move_absolute(50, 127);
-right2->move_absolute(50, 127);
+left->move_absolute(50, 70);
+left2->move_absolute(50, 70);
+right->move_absolute(50, 70);
+right2->move_absolute(50, 70);
 }
 
 void Lift::afterScore()
 {
-left->move_relative(-100, 127);
-left2->move_relative(-100, 127);
-right->move_relative(-100, 127);
-right2->move_relative(-100, 127);
+left->move_relative(-400, 60);
+left2->move_relative(-400, 60);
+right->move_relative(-400, 60);
+right2->move_relative(-400, 60);
 }
 
 void Lift::zeroh()
@@ -56,10 +56,10 @@ right2->move_absolute(550, 127);
 
 void Lift::lowpostfliph()
 {
-left->move_absolute(300, 127);
-left2->move_absolute(300, 127);
-right->move_absolute(300, 127);
-right2->move_absolute(300, 127);
+left->move_absolute(400, 127);
+left2->move_absolute(400, 127);
+right->move_absolute(400, 127);
+right2->move_absolute(400, 127);
 }
 
 void Lift::highposth()

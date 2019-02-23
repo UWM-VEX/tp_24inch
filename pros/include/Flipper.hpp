@@ -6,6 +6,7 @@ class Flipper{
 	pros::Motor* motor2;
 	double DOWN_POSITION;
 	double UP_POSITION;
+	double TILT_POSITION;
 public:
 	Flipper();
 	void initFlipper(int motor1Port, int motor2Port);
@@ -16,6 +17,9 @@ public:
 	void up();
 	bool isUp();
 	void upBlocking();
+	void tilt();
+	bool isTilt();
+	void tiltBlocking();
 	void printMotorTemps();
 };
 
