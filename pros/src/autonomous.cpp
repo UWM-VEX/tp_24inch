@@ -7,24 +7,25 @@ void turnAngleGyro(double angle, ChassisControllerIntegrated* drive, double maxS
 	pros::lcd::initialize();
 
 	uint32_t timeAtAngle = 0;
+	uint32_t startTime = pros::millis();
 
 	ADIGyro gyro(1, 0.092);
 	gyro.reset();
 
 	double newOutput;
 	double newInput;
-
+	
 	do
 	{
 		newInput = gyro.get();
 
 		if(std::abs(newInput - angle) > 10)
 		{
-			newOutput = 0.5;
+			newOutput = maxSpeed;
 		}
-		else if(std::abs(newInput - angle) > 1)
+		else if(std::abs(newInput - angle) > 2)
 		{
-			newOutput = 0.2;
+			newOutput = 0.35;
 		}
 		else
 		{
@@ -38,6 +39,7 @@ void turnAngleGyro(double angle, ChassisControllerIntegrated* drive, double maxS
 
 		drive->arcade(0, newOutput);
 
+
 		pros::lcd::print(0, "Gyro: %f", newInput);
 		pros::Task::delay(20);
 
@@ -49,7 +51,7 @@ void turnAngleGyro(double angle, ChassisControllerIntegrated* drive, double maxS
 		{
 			timeAtAngle = 0;
 		}
-	} while(!(pros::millis() - timeAtAngle > 250 && timeAtAngle != 0));
+	}while(!(pros::millis() - timeAtAngle > 250 && timeAtAngle != 0) && pros::millis() - startTime < 2000);
 
 	drive->stop();
 }
@@ -115,9 +117,9 @@ void autonomous()
 
 			turnAngleGyro(90, &autoDrive);
 		break;
-
 		case(TWO_CAPS):
-			if ( Alliance == BLUE ) {
+			if(autonomousInfoStruct.alliance == BLUE)
+			{
 				robotFlipper.downBlocking();
 
 				profileController->generatePath({
@@ -131,12 +133,11 @@ void autonomous()
 
 				profileController->removePath("cap1");
 
-				robotLift.travelh();
-				robotLift.waitForTarget();
+				robotFlipper.tiltBlocking();
 
 				profileController->generatePath({
 				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-				  okapi::Point{16_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  okapi::Point{18_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back1" // Profile name
 				);
 
@@ -147,6 +148,17 @@ void autonomous()
 
 				turnAngleGyro(-60, &autoDrive);
 
+				profileController->generatePath({
+				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+				  okapi::Point{10_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "getRoom" // Profile name
+				);
+
+				profileController->setTarget("getRoom", true);
+				profileController->waitUntilSettled();
+
+				profileController->removePath("getRoom");
+
 				robotLift.lowpostfliph();
 				robotLift.waitForTarget();
 
@@ -154,7 +166,7 @@ void autonomous()
 
 				profileController->generatePath({
 				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-				  okapi::Point{6_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  okapi::Point{11_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "pole1" // Profile name
 				);
 
@@ -168,7 +180,7 @@ void autonomous()
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{14_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{11_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back2"
 				);
 
@@ -179,14 +191,14 @@ void autonomous()
 
 				robotLift.zeroh();
 				robotLift.waitForTarget();
-
+				
 				robotFlipper.downBlocking();
-
-				turnAngleGyro (90, &autoDrive);
+				
+				turnAngleGyro (80, &autoDrive);
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{24_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{15_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "cap2"
 				);
 
@@ -195,14 +207,24 @@ void autonomous()
 
 				profileController->removePath("cap2");
 
-				robotLift.travelh();
-				robotLift.waitForTarget();
-
-				turnAngleGyro(-90, &autoDrive);
+				robotFlipper.tiltBlocking();
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
 					okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "back3"
+				);
+
+				profileController->setTarget("back3", true);
+				profileController->waitUntilSettled();
+
+				profileController->removePath("back3");
+
+				turnAngleGyro(-90, &autoDrive, 0.7);
+
+				profileController->generatePath({
+					okapi::Point{0_in, 0_ft, 0_deg},
+					okapi::Point{6_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "lineToPole"
 				);
 
@@ -211,29 +233,29 @@ void autonomous()
 
 				profileController->removePath("lineToPole");
 
-				turnAngleGyro(-90, &autoDrive);
+				turnAngleGyro(-80, &autoDrive, 0.7);
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
-				  "lineToPole"
+					okapi::Point{11_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "lineToPole2"
 				);
 
-				profileController->setTarget("lineToPole", false);
+				profileController->setTarget("lineToPole2", false);
 
 				robotLift.lowposth();
 
 				profileController->waitUntilSettled();
 				robotLift.waitForTarget();
 
-				profileController->removePath("lineToPole");
+				profileController->removePath("lineToPole2");
 
 				robotLift.afterScore();
 				robotLift.waitForTarget();
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{36_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{18_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "backToPlatform"
 				);
 
@@ -246,19 +268,33 @@ void autonomous()
 
 				profileController->removePath("backToPlatform");
 
+				robotLift.zeroh();
+				robotLift.waitForTarget();
+
 				turnAngleGyro(90, &autoDrive);
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{36_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{45_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "onPlatform"
 				);
 
 				profileController->setTarget("onPlatform", true);
 				profileController->waitUntilSettled();
-
 				profileController->removePath("onPlatform");
-			} else if(Alliance == RED) {
+
+				profileController->generatePath({
+					okapi::Point{0_in, 0_ft, 0_deg},
+					okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "onPlatform2"
+				);
+
+				profileController->setTarget("onPlatform2", true);
+				profileController->waitUntilSettled();
+				profileController->removePath("onPlatform2");
+			}
+			else
+			{
 				robotFlipper.downBlocking();
 
 				profileController->generatePath({
@@ -272,12 +308,11 @@ void autonomous()
 
 				profileController->removePath("cap1");
 
-				robotLift.travelh();
-				robotLift.waitForTarget();
+				robotFlipper.tiltBlocking();
 
 				profileController->generatePath({
 				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-				  okapi::Point{16_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  okapi::Point{15_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back1" // Profile name
 				);
 
@@ -288,6 +323,17 @@ void autonomous()
 
 				turnAngleGyro(60, &autoDrive);
 
+				profileController->generatePath({
+				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+				  okapi::Point{10_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "getRoom" // Profile name
+				);
+
+				profileController->setTarget("getRoom", true);
+				profileController->waitUntilSettled();
+
+				profileController->removePath("getRoom");
+
 				robotLift.lowpostfliph();
 				robotLift.waitForTarget();
 
@@ -295,7 +341,7 @@ void autonomous()
 
 				profileController->generatePath({
 				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-				  okapi::Point{6_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "pole1" // Profile name
 				);
 
@@ -309,7 +355,7 @@ void autonomous()
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{14_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{17_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back2"
 				);
 
@@ -320,14 +366,14 @@ void autonomous()
 
 				robotLift.zeroh();
 				robotLift.waitForTarget();
-
+				
 				robotFlipper.downBlocking();
-
-				turnAngleGyro (-90, &autoDrive);
+				
+				turnAngleGyro (-80, &autoDrive);
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{24_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{15_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "cap2"
 				);
 
@@ -336,14 +382,24 @@ void autonomous()
 
 				profileController->removePath("cap2");
 
-				robotLift.travelh();
-				robotLift.waitForTarget();
-
-				turnAngleGyro(90, &autoDrive);
+				robotFlipper.tiltBlocking();
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
 					okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "back3"
+				);
+
+				profileController->setTarget("back3", true);
+				profileController->waitUntilSettled();
+
+				profileController->removePath("back3");
+
+				turnAngleGyro(90, &autoDrive, 0.5);
+
+				profileController->generatePath({
+					okapi::Point{0_in, 0_ft, 0_deg},
+					okapi::Point{11_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "lineToPole"
 				);
 
@@ -352,29 +408,32 @@ void autonomous()
 
 				profileController->removePath("lineToPole");
 
-				turnAngleGyro(90, &autoDrive);
+				turnAngleGyro(72.5, &autoDrive, 0.5);
+
+				robotFlipper.smallTiltBlocking();
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
-				  "lineToPole"
+					okapi::Point{9_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "lineToPole2"
 				);
 
-				profileController->setTarget("lineToPole", false);
+				profileController->setTarget("lineToPole2", false);
 
 				robotLift.lowposth();
 
 				profileController->waitUntilSettled();
 				robotLift.waitForTarget();
 
-				profileController->removePath("lineToPole");
+				profileController->removePath("lineToPole2");
+
 
 				robotLift.afterScore();
 				robotLift.waitForTarget();
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{36_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{24_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "backToPlatform"
 				);
 
@@ -387,18 +446,30 @@ void autonomous()
 
 				profileController->removePath("backToPlatform");
 
+				robotLift.zeroh();
+				robotLift.waitForTarget();
+
 				turnAngleGyro(-90, &autoDrive);
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{36_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{45_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "onPlatform"
 				);
 
 				profileController->setTarget("onPlatform", true);
 				profileController->waitUntilSettled();
-
 				profileController->removePath("onPlatform");
+
+				profileController->generatePath({
+					okapi::Point{0_in, 0_ft, 0_deg},
+					okapi::Point{4_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  "onPlatform2"
+				);
+
+				profileController->setTarget("onPlatform2", true);
+				profileController->waitUntilSettled();
+				profileController->removePath("onPlatform2");
 			}
 		break;
 		default:

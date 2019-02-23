@@ -32,10 +32,10 @@ right2->move_absolute(50, 70);
 
 void Lift::afterScore()
 {
-left->move_relative(-400, 60);
-left2->move_relative(-400, 60);
-right->move_relative(-400, 60);
-right2->move_relative(-400, 60);
+left->move_relative(-400, 40);
+left2->move_relative(-400, 40);
+right->move_relative(-400, 40);
+right2->move_relative(-400, 40);
 }
 
 void Lift::zeroh()

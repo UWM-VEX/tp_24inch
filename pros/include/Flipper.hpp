@@ -7,6 +7,7 @@ class Flipper{
 	double DOWN_POSITION;
 	double UP_POSITION;
 	double TILT_POSITION;
+	double SMALL_TILT_POSITION;
 public:
 	Flipper();
 	void initFlipper(int motor1Port, int motor2Port);
@@ -20,6 +21,9 @@ public:
 	void tilt();
 	bool isTilt();
 	void tiltBlocking();
+	void smallTilt();
+	bool isSmallTilt();
+	void smallTiltBlocking();
 	void printMotorTemps();
 };
 
