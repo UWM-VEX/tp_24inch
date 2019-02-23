@@ -180,7 +180,7 @@ void autonomous()
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{13_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{11_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back2"
 				);
 
@@ -194,11 +194,11 @@ void autonomous()
 				
 				robotFlipper.downBlocking();
 				
-				turnAngleGyro (80, &autoDrive);
+				turnAngleGyro (85, &autoDrive);
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{15_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{17_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "cap2"
 				);
 
@@ -211,7 +211,7 @@ void autonomous()
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{16_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back3"
 				);
 
@@ -233,22 +233,22 @@ void autonomous()
 
 				profileController->removePath("lineToPole");
 
-				turnAngleGyro(-82.5, &autoDrive, 0.5);
+				turnAngleGyro(-92.5, &autoDrive, 0.6);
 				
 				robotFlipper.smallTiltBlocking();
 
+				robotLift.lowposth();
+				robotLift.waitForTarget();
+
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{9_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{8_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "lineToPole2"
 				);
 
 				profileController->setTarget("lineToPole2", false);
 
-				robotLift.lowposth();
-
 				profileController->waitUntilSettled();
-				robotLift.waitForTarget();
 
 				profileController->removePath("lineToPole2");
 
@@ -257,7 +257,7 @@ void autonomous()
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{24_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{20_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "backToPlatform"
 				);
 
