@@ -137,7 +137,7 @@ void autonomous()
 
 				profileController->generatePath({
 				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-				  okapi::Point{15_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  okapi::Point{17_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back1" // Profile name
 				);
 
@@ -146,7 +146,7 @@ void autonomous()
 
 				profileController->removePath("back1");
 
-				turnAngleGyro(-60, &autoDrive);
+				turnAngleGyro(-60, &autoDrive, 0.7);
 
 				profileController->generatePath({
 				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
@@ -166,7 +166,7 @@ void autonomous()
 
 				profileController->generatePath({
 				  okapi::Point{0_in, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
-				  okapi::Point{12_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+				  okapi::Point{11_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "pole1" // Profile name
 				);
 
@@ -180,7 +180,7 @@ void autonomous()
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{17_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{13_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "back2"
 				);
 
@@ -224,7 +224,7 @@ void autonomous()
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{11_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{5_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "lineToPole"
 				);
 
@@ -233,7 +233,7 @@ void autonomous()
 
 				profileController->removePath("lineToPole");
 
-				turnAngleGyro(-72.5, &autoDrive, 0.5);
+				turnAngleGyro(-82.5, &autoDrive, 0.5);
 				
 				robotFlipper.smallTiltBlocking();
 
@@ -410,13 +410,13 @@ void autonomous()
 
 				profileController->removePath("lineToPole");
 
-				turnAngleGyro(72.5, &autoDrive, 0.5);
+				turnAngleGyro(80, &autoDrive, 0.5);
 
 				robotFlipper.smallTiltBlocking();
 
 				profileController->generatePath({
 					okapi::Point{0_in, 0_ft, 0_deg},
-					okapi::Point{9_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+					okapi::Point{10_in, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
 				  "lineToPole2"
 				);
 
