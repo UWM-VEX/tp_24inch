@@ -117,7 +117,7 @@ void autonomous()
 		break;
 
 		case(TWO_CAPS):
-			if ( Alliance == BLUE ) {
+			if ( autonomousInfoStruct.alliance == BLUE ) {
 				robotFlipper.downBlocking();
 
 				profileController->generatePath({
@@ -258,7 +258,7 @@ void autonomous()
 				profileController->waitUntilSettled();
 
 				profileController->removePath("onPlatform");
-			} else if(Alliance == RED) {
+			} else if( autonomousInfoStruct.alliance == RED ) {
 				robotFlipper.downBlocking();
 
 				profileController->generatePath({
