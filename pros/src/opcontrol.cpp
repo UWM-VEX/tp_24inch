@@ -26,7 +26,7 @@ void opcontrol() {
 	while (true) {
 		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
 		{
-			opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y) * 0.3)/127.0, (master.get_analog(ANALOG_RIGHT_Y) * 0.3)/127.0);
+			opcontrolDrive.tank((master.get_analog(ANALOG_LEFT_Y) * 0.5)/127.0, (master.get_analog(ANALOG_RIGHT_Y) * 0.5)/127.0);
 		}
 		else
 		{
@@ -35,7 +35,7 @@ void opcontrol() {
 
 		if(std::abs(partner.get_analog(ANALOG_LEFT_Y)) > 20)
 		{
-			robotLift.set(partner.get_analog(ANALOG_LEFT_Y));
+			robotLift.set(partner.get_analog(ANALOG_LEFT_Y) * 0.5);
 			liftAuto = false;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
@@ -52,6 +52,8 @@ void opcontrol() {
 		{
 			robotLift.highposth();
 			liftAuto = true;
+			robotFlipper.tilt();
+			flipperAuto = true;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT))
 		{
@@ -75,7 +77,7 @@ void opcontrol() {
 		
 		if(std::abs(partner.get_analog(ANALOG_RIGHT_Y)) > 20)
 		{
-			robotFlipper.set(partner.get_analog(ANALOG_RIGHT_Y));
+			robotFlipper.set(partner.get_analog(ANALOG_RIGHT_Y) * 0.5);
 			flipperAuto = false;
 		}
 		else if(partner.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
