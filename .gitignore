@@ -1,6 +1,2 @@
 pros/bin/*
-pros/compile_commands.json
-pros/bin/*
-pros/firmware/*
-pros/include/okapi/*
-pros/include/pros/*
+*/.DS_Store
